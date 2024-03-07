@@ -11,6 +11,15 @@ app.set('view engine', 'hbs');
 app.set("views", templatePath);
 app.use(express.urlencoded({ extended: false }));
 
+//import bootstrap
+//const bootstrap = require('bootstrap');
+app.use(express.static(path.join('public')));
+app.use(express.static(path.join('node_modules/bootswatch/dist/vapor')));
+app.use('/assets/vendor/bootstrap/js', 
+    express.static(path.join('node_modules', 'bootstrap', 'dist', 'js')));
+app.use('/assets/vendor/bootswatch/dist/vapor', 
+    express.static(path.join('node_modules', 'bootswatch', 'dist', 'vapor')));
+
 app.get('/', (req, res) => {
     res.render("login.hbs")
 });
@@ -48,7 +57,6 @@ app.post('/signup', async (req, res) => {
     res.render("home")
 
 });
-
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
