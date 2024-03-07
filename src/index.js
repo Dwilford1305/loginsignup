@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
-const collection = require('./mongodb.js');
+const User = require('./mongodb.js');
 
 const templatePath = path.join(__dirname, '../templates');
 
@@ -31,12 +31,12 @@ app.get('/signup', (req, res) => {
 
 app.post('/login', async (req, res) => {
 try{
-    const check = await collection.findOne({username: req.body.username});
+    const check = await User.findOne({"local.username": req.body.username});
     if(!check){
         res.send("Username not found");
         res.render("login.hbs");
     } else {
-        const validPass = await bcrypt.compare(req.body.password, check.password);
+        const validPass = await bcrypt.compare(req.body.password, check.local.password);
         if(validPass){
             res.render("home.hbs");
         } else {
@@ -53,20 +53,20 @@ try{
 app.post('/signup', async (req, res) => {
 
     const data = {
-        username: req.body.username,
-        password: req.body.password
+        "local.username": req.body.username,
+        "local.password": req.body.password
     }
 
     // check if username already exists
-    const existingUser = await collection.findOne({username: data.username});
+    const existingUser = await User.findOne({"local.username": data.username});
     if (existingUser) {
         res.send("Username already exists");
     } else {
         // hash the password using bcrypt
         const saltRounds = 10;
-        const hashedPass = await bcrypt.hash(data.password, saltRounds);
-        data.password = hashedPass; // replace the password with the hashed password
-        await collection.insertMany([data]);
+        const hashedPass = await bcrypt.hash(data["local.password"], saltRounds);
+        data["local.password"] = hashedPass; // replace the password with the hashed password
+        await User.insertMany([data]);
 
         res.render("home")
     }

@@ -10,20 +10,46 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
     console.log("MongoDB connection FAILED");
 })
 
-const logInSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
+const ProfileSchema = new mongoose.Schema({
+    local: {
+        username: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        }
     },
-    password: {
-        type: String,
-        required: true
-    }
+    google: {
+        id: {
+            type: String,
+            required: false
+        },
+        token: {
+            type: String,
+            required: false
+        },
+        email: {
+            type: String,
+            required: false
+        },
+        name: {
+            type: String,
+            required: false
+        }
+    },
+    first_name: { type: String},
+    last_name: { type: String},
+    username: { type: String,
+        unique: true},
+    email: { type: String,
+        unique: true},
 
 });
 
 
-const collection = new mongoose.model("users", logInSchema);
+const User = new mongoose.model("users", ProfileSchema);
 
-module.exports = collection;
+module.exports = User;
