@@ -2,13 +2,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.ynuwarp.mongodb.net/loginSignupdb`)
-.then(()=>{
-    console.log("MongoDB connection successful");
-})
-.catch((error)=>{
-    console.log("MongoDB connection FAILED");
-})
+async function connectDB() {
+    try {
+        await mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.ynuwarp.mongodb.net/loginSignupdb`);
+        console.log("MongoDB connection successful");
+    } catch (error) {
+        console.error("MongoDB connection FAILED", error);
+    }
+}
 
 const ProfileSchema = new mongoose.Schema({
     local: {
@@ -52,4 +53,5 @@ const ProfileSchema = new mongoose.Schema({
 
 const User = new mongoose.model("users", ProfileSchema);
 
-module.exports = User;
+module.exports.User = User;
+module.exports.connectDB = connectDB;
