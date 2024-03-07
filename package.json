@@ -4,6 +4,7 @@
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "bootswatch": "^5.3.3",
     "dotenv": "^16.4.5",
