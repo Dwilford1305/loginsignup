@@ -3,7 +3,6 @@ const app = express();
 const path = require('path');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
-const User = require('./mongodb.js');
 
 const templatePath = path.join(__dirname, '../templates');
 
