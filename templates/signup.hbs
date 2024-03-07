@@ -2,23 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" 
+        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css"
+    href="/assets/vendor/bootswatch/dist/vapor/bootstrap.min.css">
     <title>Signup</title>
 </head>
 <body>
-    
 
-    <h2>Sign Up</h2>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Sociazilla</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/signup">Sign Up</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
     <form action="/signup" method="post">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <button type="submit">Sign Up</button>
-        </br>
-        <a href="/">Login</a>
+  <fieldset>
+    <legend>Sign Up</legend>
+    <div class="row">
+      <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="username" placeholder="User Name">
+    <label for="floatingUserName">User Name</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" class="form-control" name="password" placeholder="Password" autocomplete="off">
+    <label for="floatingPassword">Password</label>
+  </div>
+    </div>
+    <div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+  </form>
+  
+  <strong>Heads up!</strong> <a href="/">Log In Here.</a>
+
         
 
 
-
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
