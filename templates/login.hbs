@@ -28,7 +28,7 @@
           <a class="nav-link" href="/">Login</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/signup">Sign Up</a>
+          <a class="nav-link" href="/api/auth">Sign Up</a>
         </li>
       </ul>
     </div>
@@ -36,13 +36,14 @@
 </nav>
 
 
-    <form action="/login" method="post">
+    <form action="/api/auth/login" method="post">
   <fieldset>
     <legend>Login</legend>
     <div class="row">
   <div class="form-floating mb-3">
     <input type="text" class="form-control" name="username" placeholder="User Name">
     <label for="floatingUserName">User Name</label>
+  </div>
   </div>
   <div class="form-floating">
     <input type="password" class="form-control" name="password" placeholder="Password" autocomplete="off">
@@ -55,7 +56,7 @@
   </fieldset>
   </form>
   
-  <strong>Heads up!</strong> <a href="/signup">Sign Up Here.</a>
+  <strong>Heads up!</strong> <a href="/api/auth">Sign Up Here.</a>
 
 
 

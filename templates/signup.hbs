@@ -34,13 +34,17 @@
   </div>
 </nav>
 
-    <form action="/signup" method="post">
+    <form action="/api/auth/signup" method="post">
   <fieldset>
     <legend>Sign Up</legend>
     <div class="row">
       <div class="form-floating mb-3">
     <input type="text" class="form-control" name="username" placeholder="User Name">
     <label for="floatingUserName">User Name</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="email" placeholder="Email@Address.com">
+    <label for="floatingUserName">Email</label>
   </div>
   <div class="form-floating">
     <input type="password" class="form-control" name="password" placeholder="Password" autocomplete="off">
