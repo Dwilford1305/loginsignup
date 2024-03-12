@@ -1,5 +1,12 @@
 const User = require('../models/User');
 const router = require('express').Router();
+const hbs = require('hbs');
+
+router.get('/', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    res.render("home", user)
+    
+});
 
 //update user
 router.put('/:id', async (req, res) => {
@@ -48,6 +55,11 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json(error);
     }
+});
+//get profile page
+router.get('/:id/profile', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    res.render("profile", user);
 });
 //follow a user
 router.put('/:id/follow', async (req, res) => {
