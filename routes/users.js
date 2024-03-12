@@ -1,15 +1,15 @@
 const User = require('../models/User');
 const router = require('express').Router();
 const hbs = require('hbs');
+const { ensureAuthenticated } = require('../routes/auth');
 
-router.get('/', async (req, res) => {
-    const currentUser = await User.findById(req.params.id);
-    res.render("home", currentUser);
+router.get('/', ensureAuthenticated, async (req, res) => {
+    res.render("home", {user: req.session.user});
 });
 
 //update user
-router.put('/:id', async (req, res) => {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+router.put('/:id', ensureAuthenticated, async (req, res) => {
+    if (req.session.userId === req.params.id || req.session.isAdmin) {
         if (req.body.password) {
             try {
             const salt = await bcrypt.genSalt(10);
@@ -31,7 +31,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 //delete user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
     if (req.body.userId === req.params.id || req.body.isAdmin) {
         try {
             const updatedUser = await User.deleteOne({ _id: req.params.id }, {
@@ -45,23 +45,13 @@ router.delete('/:id', async (req, res) => {
         res.status(401).json("You can only delete your account");
     }
 });
-//get a user
-router.get('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        const { password, updatedAt, ...other } = user._doc;
-        res.status(200).json(other);
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
 //get profile page
-router.get('/:id/profile', async (req, res) => {
-    const user = await User.findById(req.params.id);
-    res.render("profile", user);
+router.get('/:id/profile', ensureAuthenticated, async (req, res) => {
+    res.render("profile", {user: req.session.user});
 });
+
 //follow a user
-router.put('/:id/follow', async (req, res) => {
+router.put('/:id/follow', ensureAuthenticated, async (req, res) => {
     if (req.body.userId !== req.params.id) {
         try {
             const user = await User.findById(req.params.id);
@@ -81,7 +71,7 @@ router.put('/:id/follow', async (req, res) => {
     }
 });
 //unfollow a user
-router.put('/:id/unfollow', async (req, res) => {
+router.put('/:id/unfollow', ensureAuthenticated, async (req, res) => {
     if (req.body.userId !== req.params.id) {
         try {
             const user = await User.findById(req.params.id);
@@ -100,4 +90,17 @@ router.put('/:id/unfollow', async (req, res) => {
         res.status(401).json("You can't unfollow yourself");
     }
 });
+
+//get a user
+router.get('/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        const { password, updatedAt, ...other } = user._doc;
+        res.status(200).json(other);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
 module.exports = router;

@@ -12,14 +12,14 @@
 <body>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Sociazilla</a>
+    <a class="navbar-brand" href="/api/posts/timeline/all">Sociazilla</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/api/user">Home
+          <a class="nav-link" href="/api/posts/timeline/all">Home
           </a>
         </li>
         <li class="nav-item">
@@ -28,31 +28,67 @@
         <li class="nav-item">
           <a class="nav-link" href="/api/auth">Sign Up</a>
         </li>
+        {{#if user}}
         <li class="nav-item">
-          <a class="nav-link active" href="/api/user/profile">Profile
-          <span class="visually-hidden">(current)</span>
-          </a>
+          <a class="nav-link" href="/api/user/{{user._id}}/profile">Profile</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/api/auth/logout">Logout</a>
+        </li>
+        {{/if}}
       </ul>
     </div>
   </div>
 </nav>
-    <h1>Welcome, {{username}}!</h1>
-    <p>Email: {{email}}</p>
-    <p>Location: {{location}}</p>
+    <h1>Welcome, {{user.username}}!</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Location: {{user.location}}</p>
     <!-- Add more profile information here -->
     
     <!-- Form for updating user information -->
-    <form action="/update-profile" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{email}}">
-        <br>
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" value="{{location}}">
-        <br>
-        <!-- Add more input fields for other profile properties -->
-        <button type="submit">Update Profile</button>
-    </form>
+    <form id="updateProfile" >
+  <fieldset>
+    <legend>Update Account Info</legend>
+    <div class="row">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="email" placeholder="Email">
+    <label for="floatingEmail">Email Address</label>
+  </div>
+  </div>
+  <div class="form-floating">
+    <input type="text" class="form-control" name="location" placeholder="Location">
+    <label for="floatingLocation">Location</label>
+  </div>
+
+    </div>
+    </br>
+    <div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+  </fieldset>
+  </form>
     <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
+<script>
+  $('#updateProfile').on('submit', function(e) {
+    e.preventDefault();
+
+    var data = $(this).serialize();
+    var url = '/api/users/{{user._id}}';
+    console.log(data);
+
+    $.ajax({
+      type: 'PUT',
+      url: url,
+      data: data,
+      success: function(data) {
+        console.log('Profile updated');
+        form.reset();
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    })
+  });
+</script>
 </html>

@@ -8,6 +8,8 @@ dotenv.config();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+require('../models/User');
+
 
 mongoose.connect(`${process.env.MONGO_URL}`)
 .then(()=>{
@@ -24,7 +26,7 @@ app.set('view engine', 'hbs');
 app.set("views", templatePath);
 app.use(morgan('dev'));
 const userRouter = require('../routes/users.js');
-const authRouter = require('../routes/auth.js');
+const { router: authRouter }= require('../routes/auth.js');
 const postRouter = require('../routes/posts.js');
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -53,10 +55,6 @@ app.use("/api/posts", postRouter);
 app.get('/', (req, res) => {
     res.render("login.hbs")
 });
-// Moved to routes/users.js
-//app.get('/user', (req, res) => {
-//    res.render("home.hbs")
-//});
 
 app.listen(3000, () => {
     console.log('Backend server is running on port 3000');

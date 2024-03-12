@@ -3,18 +3,6 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const express = require('express');
 
-//populate home page
-//router.get('/', async (req, res) => {
-//    try {
-//        const currentUser = await User.findById(req.params.id);
-//        const posts = await Post.find();
-//        console.log(posts, currentUser);
-//        res.render('home', { posts, currentUser });
-//    } catch (error) {
-//        res.status(500).json(error);
-//    }
-//});
-
 //create a post
 router.post('/', async (req, res) => {
     const newPost = new Post(req.body);
@@ -80,18 +68,17 @@ router.get('/:id', async (req, res) => {
 //get timeline posts
 router.get('/timeline/all', async (req, res) => {
     try {
-        const currentUser = await User.findById(req.session.user._id);
-        const userPosts = await Post.find({userId: currentUser._id});
-        console.log(currentUser.following);
+        const user = await User.findById(req.session.user._id);
+        const userPosts = await Post.find({userId: user._id});
         let friendPosts = await Promise.all(
-            currentUser.following.map(async (friendId) => {
+            user.following.map(async (friendId) => {
                 return Post.find({userId: friendId});
             })
         );
         // Flatten the array
         friendPosts = friendPosts.flat();
 
-        res.render('home', { userPosts, friendPosts, currentUser });
+        res.render('home', { userPosts, friendPosts, user: req.session.user });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);
