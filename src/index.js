@@ -23,6 +23,7 @@ app.set("views", templatePath);
 app.use(morgan('dev'));
 const userRouter = require('../routes/users.js');
 const authRouter = require('../routes/auth.js');
+const postRouter = require('../routes/posts.js');
 app.use(express.urlencoded({ extended: false }));
 
 //import bootstrap
@@ -36,6 +37,7 @@ app.use('/assets/vendor/bootswatch/dist/vapor',
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/posts", postRouter);
 
 app.get('/', (req, res) => {
     res.render("login.hbs")
