@@ -3,9 +3,8 @@ const router = require('express').Router();
 const hbs = require('hbs');
 
 router.get('/', async (req, res) => {
-    const user = await User.findById(req.params.id);
-    res.render("home", user)
-    
+    const currentUser = await User.findById(req.params.id);
+    res.render("home", currentUser);
 });
 
 //update user

@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 mongoose.connect(`${process.env.MONGO_URL}`)
 .then(()=>{
@@ -25,6 +27,15 @@ const userRouter = require('../routes/users.js');
 const authRouter = require('../routes/auth.js');
 const postRouter = require('../routes/posts.js');
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+    secret: 'SocEMP',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ 
+        mongoUrl: process.env.MONGO_URL,
+    }),
+    cookie: { secure: false } // set to true if your using https
+}));
 
 //import bootstrap
 //const bootstrap = require('bootstrap');

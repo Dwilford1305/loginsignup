@@ -28,7 +28,7 @@ router.post("/signup", async (req, res) => {
             })
             //save user
             await user.save();
-            res.redirect("/api/user");
+            res.redirect("/api/posts");
         } catch (error) {
             console.log(error);
         }
@@ -44,7 +44,8 @@ router.post('/login', async (req, res) => {
         } else {
             const validPass = await bcrypt.compare(req.body.password, check.password);
             if (validPass) {
-                res.redirect("/api/user");
+                req.session.user = check; // save user to session
+                res.redirect("/api/posts/timeline/all");
             } else {
                 res.send("Invalid password");
             }
