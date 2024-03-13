@@ -29,6 +29,7 @@ const userRouter = require('../routes/users.js');
 const { router: authRouter }= require('../routes/auth.js');
 const postRouter = require('../routes/posts.js');
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(session({
     secret: 'SocEMP',
     resave: false,

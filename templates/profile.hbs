@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <he>
     <meta charset="UTF-8">
     <meta name="viewport" 
         content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,7 +8,7 @@
     href="/assets/vendor/bootswatch/dist/vapor/bootstrap.min.css">
     <title>User Profile</title>
 </head>
-<body>
+<br>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="/api/posts/timeline/all">Sociazilla</a>
@@ -42,7 +41,7 @@
 </nav>
     <h1>Welcome, {{user.username}}!</h1>
     <p>Email: {{user.email}}</p>
-    <p>Location: {{user.location}}</p>
+    <p>City: {{user.city}}</p>
     <!-- Add more profile information here -->
     
     <!-- Form for updating user information -->
@@ -55,17 +54,29 @@
     <label for="floatingEmail">Email Address</label>
   </div>
   </div>
-  <div class="form-floating">
-    <input type="text" class="form-control" name="location" placeholder="Location">
-    <label for="floatingLocation">Location</label>
+  <div class="row">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="city" placeholder="City">
+    <label for="floatingLocation">City</label>
   </div>
-
-    </div>
+  </div>
+  <div class="row">
+  <div class="form-floating mb-3">
+    <input type="password" class="form-control" name="password" placeholder="Change Password">
+    <label for="floatingLocation">Change Password</label>
+  </div>
+  </div>
     </br>
     <div>
     <button type="submit" class="btn btn-primary">Update Profile</button>
   </fieldset>
   </form>
+  </br>
+  <form id="deleteProfile">
+    <fieldset>
+  <button type="submit" class="btn btn-primary">Delete Account</button>
+  </form>
+  </fieldset>
     <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
@@ -74,15 +85,35 @@
     e.preventDefault();
 
     var data = $(this).serialize();
-    var url = '/api/users/{{user._id}}';
-    console.log(data);
+    var url = '/api/user/{{user._id}}';
 
     $.ajax({
       type: 'PUT',
       url: url,
       data: data,
       success: function(data) {
+        window.location.href = '/api/user/{{user._id}}/profile';
         console.log('Profile updated');
+        form.reset();
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    })
+  });
+  $('#deleteProfile').on('submit', function(e) {
+    e.preventDefault();
+
+    var data = $(this).serialize();
+    var url = '/api/user/{{user._id}}/delete';
+
+    $.ajax({
+      type: 'DELETE',
+      url: url,
+      data: data,
+      success: function(data) {
+        window.location.href = '/api/auth';
+        console.log('Profile deleted');
         form.reset();
       },
       error: function(err) {

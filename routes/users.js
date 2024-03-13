@@ -2,6 +2,7 @@ const User = require('../models/User');
 const router = require('express').Router();
 const hbs = require('hbs');
 const { ensureAuthenticated } = require('../routes/auth');
+const bcrypt = require('bcrypt');
 
 router.get('/', ensureAuthenticated, async (req, res) => {
     res.render("home", {user: req.session.user});
@@ -9,20 +10,31 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
 //update user
 router.put('/:id', ensureAuthenticated, async (req, res) => {
-    if (req.session.userId === req.params.id || req.session.isAdmin) {
+    if (req.session.user._id === req.params.id || req.session.user.isAdmin) {
+        const updateData = {}
+
         if (req.body.password) {
             try {
             const salt = await bcrypt.genSalt(10);
-            req.body.password = await bcrypt.hash(req.body.password, salt);
+            updateData.password = await bcrypt.hash(req.body.password, salt);
         } catch (error) {
             return res.status(500).json(error);
         }
     }
+    if (req.body.city) {
+        updateData.city = req.body.city;
+    }
+
+    if (req.body.email) {
+        updateData.email = req.body.email;
+    }
+
+      // Add other fields you want to update
         try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-                $set: req.body
+            const user = await User.findByIdAndUpdate(req.session.user, {
+                $set: updateData
             });
-            res.status(200).json("Account has been updated successfully!");
+            res.status(200).json("Account has been updated");
         } catch (error) {
             res.status(500).json(error);
         }
@@ -31,13 +43,17 @@ router.put('/:id', ensureAuthenticated, async (req, res) => {
     }
 });
 //delete user
-router.delete('/:id', ensureAuthenticated, async (req, res) => {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+router.delete('/:id/delete', ensureAuthenticated, async (req, res) => {
+    if (req.session.user._id === req.params.id || req.session.user.isAdmin) {
         try {
-            const updatedUser = await User.deleteOne({ _id: req.params.id }, {
-                $set: req.body
+            await User.deleteOne({ _id: req.params.id });
+            req.session.destroy(function(err) {
+                if (err) {
+                    res.status(500).json(err);
+                } else {
+                    res.status(200).json("Account has been deleted");
+                }
             });
-            res.status(200).json("Account has been deleted!");
         } catch (error) {
             res.status(500).json(error);
         }
@@ -47,7 +63,8 @@ router.delete('/:id', ensureAuthenticated, async (req, res) => {
 });
 //get profile page
 router.get('/:id/profile', ensureAuthenticated, async (req, res) => {
-    res.render("profile", {user: req.session.user});
+    const user = await User.findById(req.params.id);
+    res.render("profile", {user: user});
 });
 
 //follow a user
