@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 {{> header}}
-
+<br>
+<br>
 <body>
-    <h1>Welcome, {{user.username}}!</h1>
+    
   <div class="container">
+    <h1>Welcome, {{user.username}}!</h1>
     <div class="row">
       <div class="col-md-6">
         <legend>Your Account</legend>
-        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+        <div class="card text-white bg-info mb-3" style="max-width: 40rem;">
           <div class="card-body">
             <div class="card-header">Profile Information</div>
             <p class="card-text">Position: {{user.role}}</p>  
@@ -127,7 +129,7 @@
     <legend>Users In The Database</legend>
     {{#each allUsers}}
       <div class="user">
-        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+        <div class="card text-white bg-info mb-3" style="max-width: 40rem;">
           <div class="card-body">
             <div class="card-header">{{this.username}}</div>
             <p class="card-text">Position: {{this.role}}</p>
