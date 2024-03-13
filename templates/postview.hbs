@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> header}}
+
+<div class="col-md-6">
+    <legend>Your Post</legend>
+    <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+        <div class="card-body">
+            <div class="card-header">{{post.formattedDate}}</div>
+            <p class="card-text">User Name: {{post.username}}</p>  
+            <p class="card-text">Post: {{post.desc}}</p>
+            <p class="card-text">Likes: {{post.likes.length}}</p>
+        </div>
+    </div>
+
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

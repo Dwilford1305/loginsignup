@@ -20,13 +20,16 @@
 <div class="list-group" id="userPosts">  
   {{#each userPosts}}
   
-  <a href='/:{{this._id}}' class="list-group-item list-group-item-action flex-column align-items-start">
+  <a href='/api/posts/{{this._id}}' class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 id="posttitle" class="mb-1">{{ this.username }}</h5>
-      <small>{{this.createdAt}}</small>
+      <small>{{this.formattedDate}}</small>
     </div>
     <p id="postdesc" class="mb-1">{{ this.desc }}</p>
     <small>{{this.likes.length}}</small>
+  </a>
+  <a href="/api/posts/{{this._id}}/like" class="like-button">
+    <img src="/favicon_io/favicon.ico" alt="Like">
   </a>
   {{/each}}
   </div>
@@ -34,7 +37,7 @@
 {{#if friendPosts}}
 <div class="list-group" id="friendPosts">
   {{#each friendPosts}}
- 
+
   <a href='/:{{this._id}}' class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 id="friendposttitle" class="mb-1">{{ this.username }}</h5>
@@ -50,5 +53,25 @@
 
 
 <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+  document.querySelectorAll('.like-button').forEach(function(likeButton) {
+    likeButton.addEventListener('click', function(event) {
+        event.preventDefault();
+    const postId = event.target.parentElement.getAttribute('href').split('/')[3];
+    fetch('/api/posts/' + postId + '/like', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: 'userId' }),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+    });
+});
+</script>
 </body>
 </html>

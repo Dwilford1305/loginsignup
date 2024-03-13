@@ -2,13 +2,19 @@ const router = require('express').Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 const express = require('express');
+const { ensureAuthenticated } = require('./auth');
 
 //create a post
-router.post('/', async (req, res) => {
-    const newPost = new Post(req.body);
+router.post('/', ensureAuthenticated, async (req, res) => {
+    const user = await User.findById(req.session.user._id);
     try {
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost);
+        const newPost = new Post({
+            desc: req.body.post,
+            username: user.username,
+            userId: user._id,
+        });
+        await newPost.save();
+        res.redirect("/api/posts/timeline/all");
     } catch (error) {
         res.status(500).json(error);
     }
@@ -42,7 +48,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 //like a post
-router.put('/:id/like', async (req, res) => {
+router.put('/:id/like', ensureAuthenticated, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body.userId)) {
@@ -58,10 +64,13 @@ router.put('/:id/like', async (req, res) => {
 });
 //get a post
 router.get('/:id', async (req, res) => {
+    const user = await User.findById(req.session.user._id);
     try {
         const post = await Post.findById(req.params.id);
-        res.status(200).json(post);
+        
+        res.render('postview', { post: post, user: user });
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 });
