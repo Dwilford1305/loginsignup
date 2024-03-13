@@ -16,6 +16,9 @@
   </div>
 </div>
 
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
 {{#if userPosts}}
 <div class="list-group" id="userPosts">  
   {{#each userPosts}}
@@ -32,7 +35,7 @@
     <img src="/favicon_io/favicon.ico" alt="Like">
   </a>
   {{/each}}
-  </div>
+</div>
 {{/if}}
 {{#if friendPosts}}
 <div class="list-group" id="friendPosts">
@@ -48,11 +51,30 @@
   </a>
   {{/each}}
   </div>
+  </div>
+    </div>
+  </div>
 {{/if}}
-  
+</div>
+      <div class="col-md-6">
+<h2>Users List</h2>
+{{#each allUsers}}
+      <div class="user">
+        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+          <div class="card-body">
+            <div class="card-header">{{this.username}}</div>
+            <p class="card-text">Position: {{this.role}}</p>
+            <p class="card-text">Online: {{this.isOnline}}</p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+      </div>
+    </div>
 
 
 <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script>
   document.querySelectorAll('.like-button').forEach(function(likeButton) {
     likeButton.addEventListener('click', function(event) {
@@ -71,6 +93,11 @@
         console.error('Error:', error);
     });
     });
+});
+const socket = io();
+
+socket.on('login', (data) => {
+  console.log('User logged in with ID:', data.user);
 });
 </script>
 </body>

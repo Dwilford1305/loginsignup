@@ -80,10 +80,17 @@ router.get('/:id', async (req, res) => {
     }
 });
 //get timeline posts
-router.get('/timeline/all', async (req, res) => {
+router.get('/timeline/all', ensureAuthenticated, async (req, res) => {
+    const io = req.app.get('io');
+    const userId = req.session.user._id;
+    if (userId){
+    io.emit('login', { userId: userId }); // emit login event
+    console.log('a user logged in with userId: ' , userId);
+    }
     try {
         const user = await User.findById(req.session.user._id);
         const userPosts = await Post.find({userId: user._id});
+        const allUsers = await User.find({});
         let friendPosts = await Promise.all(
             user.following.map(async (friendId) => {
                 return Post.find({userId: friendId});
@@ -91,8 +98,7 @@ router.get('/timeline/all', async (req, res) => {
         );
         // Flatten the array
         friendPosts = friendPosts.flat();
-
-        res.render('home', { userPosts, friendPosts, user: req.session.user });
+        res.render('home', { userPosts, friendPosts, user: req.session.user, allUsers });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);

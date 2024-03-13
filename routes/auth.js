@@ -2,6 +2,10 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const { isObjectIdOrHexString } = require('mongoose');
+
+
+const debug = require('debug')('socket.io');
 
 function ensureAuthenticated(req, res, next) {
     if (req.session.user) {
@@ -62,6 +66,7 @@ router.post('/login', async (req, res) => {
             const validPass = await bcrypt.compare(req.body.password, check.password);
             if (validPass) {
                 req.session.user = check; // save user to session
+                await User.findByIdAndUpdate(check._id, { isOnline: true });
                 res.redirect("/api/posts/timeline/all");
             } else {
                 res.send("Invalid password");
@@ -73,11 +78,15 @@ router.post('/login', async (req, res) => {
 });
 
 //LOGOUT
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
+router.get('/logout', ensureAuthenticated, (req, res) => {
+    const check = req.session.user;
+    req.session.destroy(async (err) => {
         if (err) {
             return console.log(err);
         }
+        const io = req.app.get('io');
+        io.emit('logout', { userId: check._id }); // emit logout event
+        await User.findByIdAndUpdate(check._id, { isOnline: false });
         res.clearCookie('coolKey');
         res.redirect('/');
     });
