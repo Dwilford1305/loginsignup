@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "setup": "npm install && touch .env", 
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
