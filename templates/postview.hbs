@@ -2,17 +2,67 @@
 <html lang="en">
 {{> header}}
 
-<div class="col-md-6">
+<body>
+    <form action="/api/posts/{{post._id}}" id="postDelete">
     <legend>Your Post</legend>
     <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
         <div class="card-body">
             <div class="card-header">{{post.formattedDate}}</div>
             <p class="card-text">User Name: {{post.username}}</p>  
             <p class="card-text">Post: {{post.desc}}</p>
+            <label for="edit">Edit Post: </label>
+            <input type="text" placeholder="Edit Post" name="desc" id="desc" value="{{post.desc}}">
             <p class="card-text">Likes: {{post.likes.length}}</p>
         </div>
     </div>
+    <button type="button" class="btn btn-secondary" id="updatePost">Update</button>
+    <button type="submit" class="btn btn-primary">Delete</button>
+    </form>
 
 <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $('#updatePost').on('click', function(e) {
+    e.preventDefault();
+
+    var data = $('#postDelete').serialize();
+    console.log(data);
+    var url = '/api/posts/{{post._id}}';
+
+    $.ajax({
+      type: 'PUT',
+      url: url,
+      data: data,
+      success: function(data) {
+        window.location.href = '/api/posts/{{post._id}}';
+        console.log('Post updated');
+        form.reset();
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    })
+  });
+  $('#postDelete').on('submit', function(e) {
+    e.preventDefault();
+
+    var data = $(this).serialize();
+    var url = '/api/posts/{{post._id}}';
+
+    $.ajax({
+      type: 'DELETE',
+      url: url,
+      data: data,
+      success: function(data) {
+        window.location.href = '/api/posts/timeline/all';
+        console.log('Post deleted');
+        form.reset();
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    })
+  });
+</script>
 </body>
 </html>

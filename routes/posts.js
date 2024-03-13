@@ -20,12 +20,17 @@ router.post('/', ensureAuthenticated, async (req, res) => {
     }
 });
 //update a post
-router.put('/:id', async (req, res) => {
+router.put('/:id', ensureAuthenticated, async (req, res) => {
     try {
+        //find the post that will be updated
         const post = await Post.findById(req.params.id);
-        if (post.userId === req.body.userId) {
-            await post.updateOne({$set: req.body});
-            res.status(200).json("The post has been updated");
+        if (post.userId === req.session.user._id) {
+            if (req.body.desc) {
+                await Post.findByIdAndUpdate(req.params.id, { desc: req.body.desc });
+                res.redirect("/api/posts/{{post._id}}");
+            }
+            
+            
         } else {
             res.status(403).json("You can only update your own post");
         }
@@ -34,11 +39,11 @@ router.put('/:id', async (req, res) => {
     }
 });
 //delete a post
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
     try {
-        const post = await Post.findById(req.params.id);
-        if (post.userId === req.body.userId) {
-            await post.deleteOne({$set: req.body});
+        const post = await Post.findOne({ _id: req.params.id });
+        if (post.userId === req.session.user._id) {
+            await post.deleteOne({ _id: post._id });
             res.status(200).json("The post has been deleted");
         } else {
             res.status(403).json("You can only delete your own post");
