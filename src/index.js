@@ -34,6 +34,7 @@ mongoose.connect(`${process.env.MONGO_URL}`)
 })
 .catch((error)=>{
     console.log("MongoDB connection FAILED");
+    console.log(error);
 })
 
 const partialsPath = path.join(__dirname, '../partials');
