@@ -60,7 +60,7 @@ router.delete('/:id/delete', ensureAuthenticated, async (req, res) => {
             res.status(500).json(error);
         }
     } else {
-        res.status(401).json("You do not have authorization to delete accounts");
+        res.status(401).send("You do not have authorization to delete accounts");
     }
 });
 //get profile page

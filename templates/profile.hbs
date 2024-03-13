@@ -26,45 +26,71 @@
     <form id="updateProfile" >
     <legend>Update Account Info</legend>
     <div class="row">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="username" placeholder="Username">
-    <label for="floatingUsername">Username</label>
-  </div>
-  </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="username" placeholder="Username">
+        <label for="floatingUsername">Username</label>
+      </div>
+    </div>
     <div class="row">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="email" placeholder="Email">
-    <label for="floatingEmail">Email Address</label>
-  </div>
-  </div>
-  <div class="row">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="city" placeholder="City">
-    <label for="floatingLocation">City</label>
-  </div>
-  </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="email" placeholder="Email">
+        <label for="floatingEmail">Email Address</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="city" placeholder="City">
+        <label for="floatingLocation">City</label>
+      </div>
+    </div>
   {{#if (eq user.role 'admin')}}
-  <div class="row">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="role" placeholder="Role">
-    <label for="floatingRole">Role</label>
-  </div>
-  </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="firstName" placeholder="First Name">
+        <label for="floatingFirstName">First Name</labe>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+        <label for="floatingLastName">Last Name</labe>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="role" placeholder="Role">
+        <label for="floatingRole">Role</label>
+      </div>
+    </div>
   {{/if}}
   {{#if (eq user.role 'manager')}}
-  <div class="row">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="role" placeholder="Role">
-    <label for="floatinRole">Role</label>
-  </div>
-  </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="firstName" placeholder="First Name">
+        <label for="floatingFirstName">First Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+        <label for="floatingLastName">Last Name</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="role" placeholder="Role">
+        <label for="floatingRole">Role</label>
+      </div>
+    </div>
   {{/if}}
-  <div class="row">
-  <div class="form-floating mb-3">
-    <input type="password" class="form-control" name="password" placeholder="Change Password">
-    <label for="floatingPassword">Change Password</label>
-  </div>
-  </div>
+    <div class="row">
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Change Password">
+        <label for="floatingPassword">Change Password</label>
+      </div>
+    </div>
     </br>
     <div>
     <button type="submit" class="btn btn-primary">Update Profile</button>
