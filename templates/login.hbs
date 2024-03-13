@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 {{> header}}
-<br>
-<br>
 <body>
 
-
+<div class="container-fluid">
     <form action="/api/auth/login" method="post">
   <fieldset>
     <legend>Login</legend>
@@ -20,14 +18,15 @@
     <label for="floatingPassword">Password</label>
   </div>
 
-    </div>
-    <div>
+    
+   
     <button type="submit" class="btn btn-primary">Submit</button>
   </fieldset>
   </form>
   
   <!--<strong>Heads up!</strong> <a href="/api/auth">Sign Up Here.</a>-->
-
+  </div>
+    </div>
 
 
 {{> footer}}

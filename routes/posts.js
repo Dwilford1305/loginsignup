@@ -91,6 +91,7 @@ router.get('/timeline/all', ensureAuthenticated, async (req, res) => {
         const user = await User.findById(req.session.user._id);
         const userPosts = await Post.find({userId: user._id});
         const allUsers = await User.find({});
+        allUsers.sort((a, b) => a.username.localeCompare(b.username));
         let friendPosts = await Promise.all(
             user.following.map(async (friendId) => {
                 return Post.find({userId: friendId});
