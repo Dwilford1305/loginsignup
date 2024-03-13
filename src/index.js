@@ -9,6 +9,9 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 require('../models/User');
+hbs.registerHelper('eq', function(a, b) {
+    return a === b;
+});
 
 
 mongoose.connect(`${process.env.MONGO_URL}`)
@@ -19,10 +22,12 @@ mongoose.connect(`${process.env.MONGO_URL}`)
     console.log("MongoDB connection FAILED");
 })
 
+const partialsPath = path.join(__dirname, '../partials');
 const templatePath = path.join(__dirname, '../templates');
 
 app.use(express.json());
 app.set('view engine', 'hbs');
+hbs.registerPartials(partialsPath);
 app.set("views", templatePath);
 app.use(morgan('dev'));
 const userRouter = require('../routes/users.js');
@@ -31,7 +36,7 @@ const postRouter = require('../routes/posts.js');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(session({
-    secret: 'SocEMP',
+    secret: 'coolKey',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ 
@@ -40,8 +45,7 @@ app.use(session({
     cookie: { secure: false } // set to true if your using https
 }));
 
-//import bootstrap
-//const bootstrap = require('bootstrap');
+
 app.use(express.static(path.join('public')));
 app.use(express.static(path.join('node_modules/bootswatch/dist/vapor')));
 app.use('/assets/vendor/bootstrap/js', 

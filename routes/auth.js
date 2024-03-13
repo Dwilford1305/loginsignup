@@ -12,34 +12,43 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.get('/', (req, res) => {
-    res.render("signup.hbs")
+    res.render("adduser.hbs", {user: req.session.user})
 });
 
-//SIGNUP
-router.post("/signup", async (req, res) => {
+//adduser
+router.post("/adduser", ensureAuthenticated, async (req, res) => {
+    if (req.session.user.isAdmin) {
+
     const user = await User.findOne({username: req.body.username});
 
-    if (user) {
-        res.send("Username already exists");
-    } else {
-        try {
-            //hash password
-            const salt = await bcrypt.genSalt(10);
-            const hashedPass = await bcrypt.hash(req.body.password, salt);
+        if (user) {
+            res.send("Username already exists");
+        } else {
+            try {
+                //hash password
+                const salt = await bcrypt.genSalt(10);
+                const hashedPass = await bcrypt.hash(req.body.password, salt);
+                const isManager = req.body.manager === "on" ? true : false;
 
-            //create new user
-            const user = await new User({
-                username: req.body.username,
-                email: req.body.email,
-                password: hashedPass
-            })
-            req.session.user = user; // save user to session
-            //save user
-            await user.save();
-            res.redirect("/api/posts/timeline/all");
-        } catch (error) {
-            console.log(error);
+                //create new user
+                const user = await new User({
+                    username: req.body.username,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    password: hashedPass,
+                    role: isManager ? "manager" : "employee"
+                })
+                //save user
+                await user.save();
+                res.redirect("/api/posts/timeline/all");
+            } catch (error) {
+                console.log(error);
+            }
+    
         }
+    } else {
+        res.send("You are not authorized to create a new user");
     }
 });
 
@@ -53,7 +62,6 @@ router.post('/login', async (req, res) => {
             const validPass = await bcrypt.compare(req.body.password, check.password);
             if (validPass) {
                 req.session.user = check; // save user to session
-                console.log(req.session.user);
                 res.redirect("/api/posts/timeline/all");
             } else {
                 res.send("Invalid password");
@@ -70,7 +78,7 @@ router.get('/logout', (req, res) => {
         if (err) {
             return console.log(err);
         }
-        res.clearCookie('SocEMP');
+        res.clearCookie('coolKey');
         res.redirect('/');
     });
 });

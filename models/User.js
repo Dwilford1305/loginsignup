@@ -11,6 +11,16 @@ const UserSchema = new mongoose.Schema({
         required: false,
         unique: true
     },
+    firstName: {
+        type: String,
+        required: true,
+        max: 20
+    },
+    lastName: {
+        type: String,
+        required: true,
+        max: 20
+    },
     password: {
         type: String,
         required: true
@@ -47,9 +57,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         max: 50
     },
-    relationship: {
-        type: Number,
-        enum: [1, 2, 3]
+    role: {
+        type: String,
+        default: "employee"
     }
 },
     {timestamps: true}

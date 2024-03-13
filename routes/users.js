@@ -28,8 +28,6 @@ router.put('/:id', ensureAuthenticated, async (req, res) => {
     if (req.body.email) {
         updateData.email = req.body.email;
     }
-
-      // Add other fields you want to update
         try {
             const user = await User.findByIdAndUpdate(req.session.user, {
                 $set: updateData

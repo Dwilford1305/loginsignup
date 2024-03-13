@@ -1,0 +1,8 @@
+body {
+    margin: 10px 10px; /* 10px top/bottom, 20px left/right */
+  }
+div.form-check.form-switch {
+  padding-left: 3em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}

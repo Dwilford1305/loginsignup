@@ -1,48 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" 
-        content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css"
-    href="/assets/vendor/bootswatch/dist/vapor/bootstrap.min.css">
-    <title>Home</title>
-</head>
-<bod>
-    
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/api/posts/timeline/all">Sociazilla</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="/api/posts/timeline/all">Home
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link" href="/">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/api/auth">Sign Up</a>
-        </li>
-        {{#if user}}
-        <li class="nav-item">
-          <a class="nav-link" href="/api/user/{{user._id}}/profile">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/api/auth/logout">Logout</a>
-        </li>
-        {{/if}}
-      </ul>
-    </div>
-  </div>
-</nav>
-
+{{> header}}
+<body>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -71,7 +30,7 @@
   </a>
   {{/each}}
   </div>
-  {{/if}}
+{{/if}}
 {{#if friendPosts}}
 <div class="list-group" id="friendPosts">
   {{#each friendPosts}}
@@ -86,7 +45,7 @@
   </a>
   {{/each}}
   </div>
-  {{/if}}
+{{/if}}
   
 
 
