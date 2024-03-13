@@ -70,11 +70,11 @@ app.use(session({
 
 app.use(express.static(path.join('public')));
 
-app.use(express.static(path.join('node_modules/bootswatch/dist/slate')));
+app.use(express.static(path.join('node_modules/bootswatch/dist/morph')));
 app.use('/assets/vendor/bootstrap/js', 
     express.static(path.join('node_modules', 'bootstrap', 'dist', 'js')));
-app.use('/assets/vendor/bootswatch/dist/slate', 
-    express.static(path.join('node_modules', 'bootswatch', 'dist', 'slate')));
+app.use('/assets/vendor/bootswatch/dist/morph', 
+    express.static(path.join('node_modules', 'bootswatch', 'dist', 'morph')));
     app.use('/socket.io', express.static(path.join(__dirname, 
         'node_modules', 'socket.io', 'client-dist')));
 app.use("/api/user", userRouter);
