@@ -5,7 +5,7 @@
 <br>
 <body>
     
-  <div class="container">
+  <div id="welcome" class="container-fluid">
     <h1>Welcome, {{user.username}}!</h1>
     <div class="row">
       <div class="col-md-6">
@@ -148,9 +148,7 @@
 </div>
 
   
-    <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</body>
+
 <script>
   $('#updateProfile').on('submit', function(e) {
     e.preventDefault();
@@ -193,4 +191,4 @@
     })
   });
 </script>
-</html>
+{{> footer}}

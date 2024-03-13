@@ -1,12 +1,38 @@
 body {
-    margin: 10px 10px; /* 10px top/bottom, 20px left/right */
+    margin: 0.5em 0.5em; /* top/bottom, left/right */
+    padding-bottom: 3em;
+    padding-top: 3em;
   }
 div.form-check.form-switch {
-  padding-left: 3em;
+  padding-left: 10em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
 }
 a.like-button {
   transform: scale(.5);
   transform-origin: top left;
+}
+div#header.container-fluid {
+  padding-top: 0.25em;
+  padding-bottom:0.15em;
+  text-align: center;
+  background-color: #f8f9fa;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 75;
+}
+footer {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  text-align: center;
+  background-color: #f8f9fa;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 75;
+}
+div#welcome.container h1 {
+  padding-top: 0.15em;
+  padding-bottom: 0.25em;
 }

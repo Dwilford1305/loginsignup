@@ -4,7 +4,7 @@
 <body>
   <br>
   <br>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <form action="/api/posts" method="POST">
@@ -19,7 +19,7 @@
 </div>
 <br>
 
-<div class="container">
+<div class="container-fluid">
   
     <div class="row">
       <div class="col-md-6">
@@ -97,9 +97,6 @@
       </div>
     </div>
 
-
-<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
 <script>
   document.querySelectorAll('.like-button').forEach(function(likeButton) {
     likeButton.addEventListener('click', function(event) {
@@ -125,5 +122,4 @@ socket.on('login', (data) => {
   console.log('User logged in with ID:', data.user);
 });
 </script>
-</body>
-</html>
+{{> footer}}
