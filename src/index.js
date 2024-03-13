@@ -14,8 +14,7 @@ hbs.registerHelper('eq', function(a, b) {
 });
 
 
-mongoose.connect(`${process.env.MONGO_URL}`, 
-    { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(`${process.env.MONGO_URL}`)
 .then(async ()=>{
     console.log("MongoDB connection successful");
 
