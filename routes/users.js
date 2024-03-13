@@ -68,6 +68,7 @@ router.get('/:id/profile', ensureAuthenticated, async (req, res) => {
     const user = await User.findById(req.params.id);
     if (req.session.user.isAdmin || req.session.user.role === "manager") {
         const allUsers = await User.find({});
+        allUsers.sort((a, b) => a.username.localeCompare(b.username));
         res.render("profile", {user, allUsers});
     } else {
         res.render("profile", {user});
