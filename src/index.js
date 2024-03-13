@@ -14,9 +14,24 @@ hbs.registerHelper('eq', function(a, b) {
 });
 
 
-mongoose.connect(`${process.env.MONGO_URL}`)
-.then(()=>{
+mongoose.connect(`${process.env.MONGO_URL}`, 
+    { useNewUrlParser: true, useUnifiedTopology: true })
+.then(async ()=>{
     console.log("MongoDB connection successful");
+
+    //check if users exist
+    const users = await User.find();
+
+    if (users.length === 0) {
+        const adminUser = new User({
+            username: "admin",
+            password: "$2b$10$4VMd0HFUerjzju0y56J15eFyHRW7kO53drIk.i.iqE75jSlm9n6h6",
+            isAdmin: true,
+            role: "admin"
+        });
+        await adminUser.save();
+        console.log("Admin user created");
+    }
 })
 .catch((error)=>{
     console.log("MongoDB connection FAILED");
@@ -33,6 +48,7 @@ app.use(morgan('dev'));
 const userRouter = require('../routes/users.js');
 const { router: authRouter }= require('../routes/auth.js');
 const postRouter = require('../routes/posts.js');
+const User = require('../models/User');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(session({
