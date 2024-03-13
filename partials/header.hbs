@@ -3,7 +3,7 @@
     <meta name="viewport" 
         content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css"
-    href="/assets/vendor/bootswatch/dist/vapor/bootstrap.min.css">
+    href="/assets/vendor/bootswatch/dist/slate/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/stylesheets/style.css">
     <title>Home</title>
 </head>
@@ -35,8 +35,7 @@
 
         {{#if (eq user.role 'manager')}}
         <li class="nav-item">
-            <a class="nav-link active" href="/api/posts/timeline/all">Home
-            <span class="visually-hidden">(current)</span>
+            <a class="nav-link " href="/api/posts/timeline/all">Home
             </a>
         </li>
         <li class="nav-item">
@@ -44,6 +43,9 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/api/user/{{user._id}}/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/api/auth">Add User</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/api/auth/logout">Logout</a>
@@ -63,10 +65,10 @@
             <a class="nav-link" href="/api/user/{{user._id}}/profile">Profile</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/api/auth/logout">Logout</a>
+            <a class="nav-link" href="/api/auth">Add User</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/api/auth">Add User</a>
+            <a class="nav-link" href="/api/auth/logout">Logout</a>
         </li>
         {{/if}}
         </ul>

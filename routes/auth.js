@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 //adduser
 router.post("/adduser", ensureAuthenticated, async (req, res) => {
-    if (req.session.user.isAdmin) {
+    if (req.session.user.isAdmin || req.session.user.role === "manager") {
 
     const user = await User.findOne({username: req.body.username});
 

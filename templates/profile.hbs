@@ -4,14 +4,33 @@
 
 <body>
     <h1>Welcome, {{user.username}}!</h1>
-    <p>Email: {{user.email}}</p>
-    <p>City: {{user.city}}</p>
-    <!-- Add more profile information here -->
+  <div class="container">
     
-    <!-- Form for updating user information -->
+    <div class="row">
+      
+      <div class="col-md-6">
+        <legend>Your Account</legend>
+        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+          <div class="card-body">
+            <div class="card-header">Profile Information</div>
+            <p class="card-text">Position: {{user.role}}</p>  
+            <p class="card-text">First Name: {{user.firstName}}</p>
+            <p class="card-text">Last Name: {{user.lastName}}</p>
+            <p class="card-text">Email: {{user.email}}</p>
+            <p class="card-text">City: {{user.city}}</p>
+            <p class="card-text">Following: {{user.following}}</p>
+            <p class="card-text">Followers: {{user.followers}}</p>
+          </div>
+        </div>
+    
     <form id="updateProfile" >
-  <fieldset>
     <legend>Update Account Info</legend>
+    <div class="row">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="username" placeholder="Username">
+    <label for="floatingUsername">Username</label>
+  </div>
+  </div>
     <div class="row">
   <div class="form-floating mb-3">
     <input type="text" class="form-control" name="email" placeholder="Email">
@@ -24,29 +43,71 @@
     <label for="floatingLocation">City</label>
   </div>
   </div>
+  {{#if (eq user.role 'admin')}}
   <div class="row">
   <div class="form-floating mb-3">
     <input type="text" class="form-control" name="role" placeholder="Role">
-    <label for="floatingLocation">Role</label>
+    <label for="floatingRole">Role</label>
   </div>
   </div>
+  {{/if}}
+  {{#if (eq user.role 'manager')}}
+  <div class="row">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="role" placeholder="Role">
+    <label for="floatinRole">Role</label>
+  </div>
+  </div>
+  {{/if}}
   <div class="row">
   <div class="form-floating mb-3">
     <input type="password" class="form-control" name="password" placeholder="Change Password">
-    <label for="floatingLocation">Change Password</label>
+    <label for="floatingPassword">Change Password</label>
   </div>
   </div>
     </br>
     <div>
     <button type="submit" class="btn btn-primary">Update Profile</button>
-  </fieldset>
   </form>
   </br>
-  <form id="deleteProfile">
-    <fieldset>
+  </div>
+<br>
+  <form id="deleteProfile">  
+  <legend>Delete Account</legend>
+  <div class="row">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" name="username" placeholder="Username">
+    <label for="floatingUsername">Username</label>
+  </div>
+  </div>
   <button type="submit" class="btn btn-primary">Delete Account</button>
   </form>
-  </fieldset>
+  </div>
+  
+
+  <div class="col-md-6">
+    <legend>Users In The Database</legend>
+    {{#each allUsers}}
+      <div class="user">
+        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+          <div class="card-body">
+            <div class="card-header">{{this.username}}</div>
+            <p class="card-text">Position: {{this.role}}</p>
+            <p class="card-text">First Name: {{this.firstName}}</p>
+            <p class="card-text">Last Name: {{this.lastName}}</p>
+            <p class="card-text">Email: {{this.email}}</p>
+            <p class="card-text">City: {{this.city}}</p>
+            <p class="card-text">Following: {{this.following}}</p>
+            <p class="card-text">Followers: {{this.followers}}</p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+</div>
+
+  
     <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>

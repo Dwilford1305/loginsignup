@@ -10,9 +10,15 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
 //update user
 router.put('/:id', ensureAuthenticated, async (req, res) => {
-    if (req.session.user._id === req.params.id || req.session.user.isAdmin) {
+    if (req.session.user.isAdmin || req.session.user.role === "manager" ) {
         const updateData = {}
-
+        
+        //find the user that will be updated
+        const user = await User.findOne({username: req.body.username});
+        if (!user) {
+            return res.status(404).json("User not found");
+        }
+        
         if (req.body.password) {
             try {
             const salt = await bcrypt.genSalt(10);
@@ -29,7 +35,7 @@ router.put('/:id', ensureAuthenticated, async (req, res) => {
         updateData.email = req.body.email;
     }
         try {
-            const user = await User.findByIdAndUpdate(req.session.user, {
+            await User.findByIdAndUpdate(user._id, {
                 $set: updateData
             });
             res.status(200).json("Account has been updated");
@@ -42,27 +48,30 @@ router.put('/:id', ensureAuthenticated, async (req, res) => {
 });
 //delete user
 router.delete('/:id/delete', ensureAuthenticated, async (req, res) => {
-    if (req.session.user._id === req.params.id || req.session.user.isAdmin) {
+    if (req.session.user.isAdmin || req.session.user.role === "manager" ) {
+        const user = await User.findOne({username: req.body.username});
+        if (!user) {
+            return res.status(404).json("User not found");
+        }
         try {
-            await User.deleteOne({ _id: req.params.id });
-            req.session.destroy(function(err) {
-                if (err) {
-                    res.status(500).json(err);
-                } else {
-                    res.status(200).json("Account has been deleted");
-                }
-            });
+            await User.deleteOne({ _id: user._id });
+            res.status(200).json("Account has been deleted");
         } catch (error) {
             res.status(500).json(error);
         }
     } else {
-        res.status(401).json("You can only delete your account");
+        res.status(401).json("You do not have authorization to delete accounts");
     }
 });
 //get profile page
 router.get('/:id/profile', ensureAuthenticated, async (req, res) => {
     const user = await User.findById(req.params.id);
-    res.render("profile", {user: user});
+    if (req.session.user.isAdmin || req.session.user.role === "manager") {
+        const allUsers = await User.find({});
+        res.render("profile", {user, allUsers});
+    } else {
+        res.render("profile", {user});
+    }
 });
 
 //follow a user
@@ -116,6 +125,7 @@ router.get('/:id', ensureAuthenticated, async (req, res) => {
         res.status(500).json(error);
     }
 });
+
 
 
 module.exports = router;

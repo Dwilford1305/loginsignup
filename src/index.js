@@ -47,11 +47,11 @@ app.use(session({
 
 
 app.use(express.static(path.join('public')));
-app.use(express.static(path.join('node_modules/bootswatch/dist/vapor')));
+app.use(express.static(path.join('node_modules/bootswatch/dist/slate')));
 app.use('/assets/vendor/bootstrap/js', 
     express.static(path.join('node_modules', 'bootstrap', 'dist', 'js')));
-app.use('/assets/vendor/bootswatch/dist/vapor', 
-    express.static(path.join('node_modules', 'bootswatch', 'dist', 'vapor')));
+app.use('/assets/vendor/bootswatch/dist/slate', 
+    express.static(path.join('node_modules', 'bootswatch', 'dist', 'slate')));
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
