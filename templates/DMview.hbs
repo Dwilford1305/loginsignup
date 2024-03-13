@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> header}}
+<body>
+
+<h2>Direct Message With {{otherUser.username}}</h2>
+<div class="dm">
+  {{#each messages}}
+    <div class="message">
+      <p><strong>{{DM.senderName}}:</strong> {{newMessage.content}}</p>
+    </div>
+  {{/each}}
+</div>
+
+<form action="/messages/{{otherUser._id}}" method="POST">
+  <div class="form-group">
+    <label for="message">New Message:</label>
+    <textarea class="form-control" id="message" name="content"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</body>
+</html>

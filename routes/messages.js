@@ -4,23 +4,55 @@ const User = require('../models/User');
 const express = require('express');
 const { ensureAuthenticated } = require('./auth');
 
-//create a message
-router.post('/', ensureAuthenticated, async (req, res) => {
-    const user = await User.findById(req.session.user._id);
-    try {
-        const newMessage = new Message({
-            senderId: user._id,
-            receiverId: req.body.user._id,
-            senderName: user.username,
-            receiverName: req.body.user.username,
-            content: req.body.content,
-        });
-        await newMessage.save();
-        res.redirect("/api/posts/timeline/all");
-    } catch (error) {
-        res.status(500).json(error);
-    }
+router.get('/:userId', ensureAuthenticated, async (req, res) => {
+    res.render("DMview", {user: req.session.user});
 });
+
+//group messages by user
+function groupMessagesByUser(user, messages) {
+    const allDMs = {};
+    messages.forEach(message => {
+        const otherUserId = message.senderId == user._id ? 
+            message.receiverId : message.senderId;
+        if (!allDMs[otherUserId]) {
+            allDMs[otherUserId] = [];
+        }
+        allDMs[otherUserId].push(message);
+    });
+
+    return allDMs;
+}
+
+            //create a message
+            router.post('/:userId', ensureAuthenticated, async (req, res) => {
+                const user = await User.findById(req.session.user._id);
+                const otherUser = await User.findById(req.params.userId);
+
+                const newMessage = new Message({
+                    senderId: user._id,
+                    receiverId: otherUser._id,
+                    senderName: user.username,
+                    receiverName: otherUser.username,
+                    content: req.body.content,
+                });
+                try {
+                    if (newMessage.content && newMessage.content.trim() !== '') {
+                        await newMessage.save();
+                        
+                    }
+                    const messages = await Message.find({
+                        $or: [
+                            { senderId: user._id, receiverId: otherUser._id },
+                            { senderId: otherUser._id, receiverId: user._id }
+                        ]
+                    });
+                    const DM = groupMessagesByUser(user, messages);
+                    res.render('DMview', { DM: DM, messages: messages, newMessage: newMessage, otherUser: otherUser, user: user });
+                } catch (error) {
+                    console.log(error);
+                    res.status(500).json(error);
+                }
+            });
 //update a message
 router.put('/:id', ensureAuthenticated, async (req, res) => {
     try {
@@ -54,7 +86,7 @@ router.delete('/:id', ensureAuthenticated, async (req, res) => {
         res.status(500).json(error);
     }
 });
-//get a message
+//get a coonversation (DM)
 router.get('/:id', async (req, res) => {
     const user = await User.findById(req.session.user._id);
     try {
@@ -66,23 +98,36 @@ router.get('/:id', async (req, res) => {
         res.status(500).json(error);
     }
 });
-//get all messages
+//get all Direct Messages (Conversations)
 router.get('/all', ensureAuthenticated, async (req, res) => {
     const io = req.app.get('io');
     const userId = req.session.user._id;
     if (userId){
     try {
         const user = await User.findById(req.session.user._id);
-        const userMessages = await Message.find({userId: user._id});
-        const allMessages = await Message.find({});
+        const userMessages = await Message.find({
+            $or: [
+                { senderId: user._id },
+                { receiverId: user._id }
+            ]
+        });
         let friendMessages = await Promise.all(
             user.following.map(async (friendId) => {
-                return Message.find({userId: friendId});
+                return Message.find({
+                    $or: [
+                        { senderId: friendId, receiverId: user._id },
+                        { senderId: user._id, receiverId: friendId }
+                    ]
+                });
             })
-    );
+        );
         // Flatten the array
         friendMessages = friendMessages.flat();
-        res.render('home', { userMessages, friendMessages, user: req.session.user, allMessages });
+        
+        const userConversations = groupMessagesByUser(userMessages);
+        const friendConversations = groupMessagesByUser(friendMessages);
+        
+        res.render('home', { userConversations, friendConversations, user: req.session.user });
         } catch (error) {
             console.log(error);
             res.status(500).json(error);

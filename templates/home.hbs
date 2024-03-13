@@ -65,6 +65,26 @@
             <div class="card-header">{{this.username}}</div>
             <p class="card-text">Position: {{this.role}}</p>
             <p class="card-text">Online: {{this.isOnline}}</p>
+            <form action="/api/messages/{{this._id}}" method="POST">
+              <button type="sumbit" class="btn btn-outline-secondary btn-sm">Message</button>
+            </form>
+            <form action="/follow/{{this._id}}" method="POST">
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Follow</butto>
+            </form>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+    <h2>Direct Messages List</h2>
+{{#each allDMs}}
+      <div class="dms">
+        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+          <div class="card-body">
+            <div class="card-header">{{@key}}</div>
+            {{#each this}}
+            <p class="card-text">Preview: {{this.content}}</p>
+            {{/each}}
+            <button type="button" class="btn btn-outline-secondary btn-sm">Open DM</button>
           </div>
         </div>
       </div>
