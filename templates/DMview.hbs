@@ -5,23 +5,60 @@
 <br>
 <body>
 
-<h2>Direct Message With {{otherUser.username}}</h2>
-<div class="dm">
-  {{#each messages}}
-    <div class="message">
-      <p><strong>{{this.senderName}}:</strong> {{this.content}}</p>
+    <h2>Direct Message With {{otherUser.username}}</h2>
+  <div class="dm">
+    <div class="messages">
+      {{{messagesHTML}}}
     </div>
-  {{/each}}
-</div>
-
-<form action="api/messages/{{otherUser._id}}" method="POST">
-  <div class="form-group">
-    <label for="message">New Message:</label>
-    <textarea class="form-control" id="message" name="content"></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Send</button>
-</form>
+  
 
+  <form action="/api/messages/{{otherUser._id}}" method="POST">
+    <div class="form-group">
+      <label for="message">New Message:</label>
+      <textarea class="form-control" id="message" name="content"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+  </form>
+
+  <div class="usersinroom">
+    <h3>Users in Room</h3>
+    <ul>
+      {{#each usersInRoom}}
+        <li>{{this.username}}</li>
+      {{/each}}
+    </ul>
+  </div>
 
 
 {{> footer}}
+
+<script>
+  const messages = document.querySelectorAll('.message');
+  messages[messages.length - 1];
+  const socket = io();
+
+  socket.on('message', (data) => {
+    // Parse the newMessageHTML string back into HTML
+    const newMessageHTML = JSON.parse(data.newMessageHTML);
+   // Get the messages div
+    const messagesDiv = document.querySelector('.messages');
+    // Create a new div for the message
+    const newMessageDiv = document.createElement('div');
+    newMessageDiv.innerHTML = newMessageHTML;
+
+    // Append the newMessageDiv to the messages div
+    messagesDiv.appendChild(newMessageDiv);
+
+    // Scroll the new message into view
+    newMessageDiv.scrollIntoView();
+
+    message.value = '';
+    
+  });
+  socket.on('join', (user) => {
+    const newUser = document.createElement('li');
+    newUser.textContent = user.username + ' has joined the room';
+    document.querySelector('.usersinroom ul').appendChild(newUser);
+  });
+</script>

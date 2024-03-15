@@ -71,7 +71,7 @@
             <p class="card-text">Position: {{this.role}}</p>
             <p class="card-text">Online: {{this.isOnline}}</p>
             
-              <a href="/api/messages/{{this._id}}" method="POST"><span class="badge bg-light">Message</span></a>
+              <a href="/api/messages/{{this._id}}" method="GET"><span class="badge bg-light">Open Direct Message</span></a>
             
             
               <a href="/follow/{{this._id}}" method="POST"><span class="badge bg-light">Follow</span></a>
@@ -80,23 +80,7 @@
         </div>
       </div>
     {{/each}}
-    <h2>Direct Messages</h2>
-{{#each allDMs}}
-      <div class="dms">
-        <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-          <div class="card-body">
-            <div class="card-header">{{@key}}</div>
-            {{#each this}}
-            <p class="card-text">Preview: {{this.content}}</p>
-            {{/each}}
-            <button type="button" class="btn btn-outline-primary btn-sm">Open DM</button>
-          </div>
-        </div>
-      </div>
-    {{/each}}
-      </div>
-    </div>
-
+    
 <script>
   document.querySelectorAll('.like-button').forEach(function(likeButton) {
     likeButton.addEventListener('click', function(event) {
@@ -114,7 +98,7 @@
     .catch((error) => {
         console.error('Error:', error);
     });
-    });
+  });
 });
 const socket = io();
 

@@ -36,3 +36,6 @@ div#welcome.container h1 {
   padding-top: 0.15em;
   padding-bottom: 0.25em;
 }
+p.msgDate {
+  text-align: right;
+}
